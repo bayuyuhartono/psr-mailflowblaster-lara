@@ -4,16 +4,16 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
-class StoreContactRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->is_super_user === true;
     }
 
     /**
@@ -25,11 +25,9 @@ class StoreContactRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'level' => ['required', 'string', 'max:100'],
-            'company' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('contacts')->ignore($this->route('contact'))],
-            'phone' => ['nullable', 'string', 'max:50'],
-            'is_on_hold' => ['nullable', 'boolean'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'confirmed', Password::min(8)],
+            'is_super_user' => ['nullable', 'boolean'],
         ];
     }
 }

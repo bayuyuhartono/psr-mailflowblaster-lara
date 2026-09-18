@@ -1,0 +1,40 @@
+:root {
+    --mailflow-yellow-50: #fffbea;
+    --mailflow-yellow-100: #fff3bf;
+    --mailflow-yellow-200: #ffe58a;
+    --mailflow-yellow-300: #f8d56b;
+    --mailflow-yellow-500: #e8bd4d;
+    --mailflow-yellow-600: #c99a2e;
+    --mailflow-yellow-700: #8a651d;
+    --mailflow-yellow-800: #664914;
+}
+
+.mailflow-auth-card {
+    width: 100%;
+    max-width: 360px;
+}
+
+.truncate {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bg-violet-50 { background-color: var(--mailflow-yellow-50) !important; }
+.bg-violet-500 { background-color: var(--mailflow-yellow-500) !important; color: #33270b !important; }
+.bg-violet-600 { background-color: var(--mailflow-yellow-500) !important; color: #33270b !important; }
+.text-violet-200 { color: var(--mailflow-yellow-200) !important; }
+.text-violet-300 { color: var(--mailflow-yellow-300) !important; }
+.text-violet-600 { color: var(--mailflow-yellow-600) !important; }
+.text-violet-700 { color: var(--mailflow-yellow-700) !important; }
+.text-violet-800 { color: var(--mailflow-yellow-800) !important; }
+
+.focus\:border-violet-500:focus { border-color: var(--mailflow-yellow-500) !important; }
+.focus\:ring-violet-100:focus { --tw-ring-color: var(--mailflow-yellow-100) !important; }
+
+@media (hover: hover) {
+    .hover\:bg-violet-700:hover { background-color: var(--mailflow-yellow-600) !important; }
+    .hover\:text-violet-200:hover { color: var(--mailflow-yellow-200) !important; }
+    .hover\:text-violet-800:hover { color: var(--mailflow-yellow-800) !important; }
+}

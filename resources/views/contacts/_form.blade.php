@@ -8,6 +8,10 @@
         </label>
     @endforeach
 </div>
+<label class="mt-5 flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <input type="checkbox" name="is_on_hold" value="1" @checked(old('is_on_hold', $contact->is_on_hold)) class="mt-1 rounded border-slate-300">
+    <span><strong class="block text-sm">Hold this contact</strong><span class="text-xs text-slate-500">Held contacts stay in your audience but are skipped during email blasts.</span></span>
+</label>
 <div class="mt-7 flex gap-3">
     <button class="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-700">Save contact</button>
     <a href="{{ route('contacts.index') }}" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>

@@ -1,19 +1,24 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Http\UploadedFile;
 
 uses(LazilyRefreshDatabase::class);
 
+beforeEach(function (): void {
+    $this->actingAs(User::factory()->create());
+});
+
 it('imports contacts from the csv template and updates matching emails', function (): void {
-    $csv = "name,level,company,email,phone\nJane Doe,Gold,Acme Ltd,jane@example.com,12345\n";
+    $csv = "name,level,company,email,phone,on_hold\nJane Doe,Gold,Acme Ltd,jane@example.com,12345,yes\n";
     $file = UploadedFile::fake()->createWithContent('contacts.csv', $csv);
 
     $this->post(route('contacts.import'), ['file' => $file])
         ->assertRedirect(route('contacts.index'))
         ->assertSessionHas('success');
 
-    $this->assertDatabaseHas('contacts', ['email' => 'jane@example.com', 'company' => 'Acme Ltd']);
+    $this->assertDatabaseHas('contacts', ['email' => 'jane@example.com', 'company' => 'Acme Ltd', 'is_on_hold' => true]);
 
     $updated = UploadedFile::fake()->createWithContent('contacts.csv', str_replace('Acme Ltd', 'New Company', $csv));
     $this->post(route('contacts.import'), ['file' => $updated])->assertSessionHasNoErrors();

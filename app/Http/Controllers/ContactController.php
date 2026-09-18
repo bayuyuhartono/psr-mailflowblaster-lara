@@ -31,7 +31,7 @@ class ContactController extends Controller
 
     public function store(StoreContactRequest $request): RedirectResponse
     {
-        Contact::create($request->validated());
+        Contact::create([...$request->validated(), 'is_on_hold' => $request->boolean('is_on_hold')]);
 
         return redirect()->route('contacts.index')->with('success', 'Contact created successfully.');
     }
@@ -48,7 +48,7 @@ class ContactController extends Controller
 
     public function update(StoreContactRequest $request, Contact $contact): RedirectResponse
     {
-        $contact->update($request->validated());
+        $contact->update([...$request->validated(), 'is_on_hold' => $request->boolean('is_on_hold')]);
 
         return redirect()->route('contacts.index')->with('success', 'Contact updated successfully.');
     }

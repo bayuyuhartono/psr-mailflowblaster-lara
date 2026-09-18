@@ -16,7 +16,8 @@ class EmailCampaignController extends Controller
     {
         return view('campaigns.index', [
             'campaigns' => EmailCampaign::query()->latest()->paginate(10),
-            'contactCount' => Contact::query()->count(),
+            'contactCount' => Contact::query()->where('is_on_hold', false)->count(),
+            'heldContactCount' => Contact::query()->where('is_on_hold', true)->count(),
             'isConfigured' => EmailSetting::query()->exists(),
         ]);
     }
@@ -27,7 +28,7 @@ class EmailCampaignController extends Controller
             return redirect()->route('email-settings.edit')->withErrors(['email' => 'Configure your SMTP details before sending a campaign.']);
         }
 
-        $recipientCount = Contact::query()->count();
+        $recipientCount = Contact::query()->where('is_on_hold', false)->count();
         if ($recipientCount === 0) {
             return back()->withErrors(['contacts' => 'Add at least one contact before sending a campaign.'])->withInput();
         }
@@ -38,11 +39,21 @@ class EmailCampaignController extends Controller
             'recipient_count' => $recipientCount,
         ]);
 
-        Contact::query()->select(['id', 'name', 'email'])->chunkById(500, function ($contacts) use ($campaign): void {
-            foreach ($contacts as $contact) {
-                SendCampaignEmail::dispatch($campaign->id, $contact->name, $contact->email);
-            }
-        });
+        Contact::query()
+            ->where('is_on_hold', false)
+            ->select(['id', 'name', 'level', 'company', 'email', 'phone'])
+            ->chunkById(500, function ($contacts) use ($campaign): void {
+                foreach ($contacts as $contact) {
+                    SendCampaignEmail::dispatch(
+                        $campaign->id,
+                        $contact->name,
+                        $contact->level,
+                        $contact->company,
+                        $contact->email,
+                        $contact->phone ?? '',
+                    );
+                }
+            });
 
         return redirect()->route('campaigns.index')->with('success', "Campaign queued for {$recipientCount} contacts.");
     }

@@ -11,5 +11,10 @@ class Contact extends Model
     /** @use HasFactory<ContactFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'level', 'company', 'email', 'phone'];
+    protected $fillable = ['name', 'level', 'company', 'email', 'phone', 'is_on_hold'];
+
+    protected function casts(): array
+    {
+        return ['is_on_hold' => 'boolean'];
+    }
 }

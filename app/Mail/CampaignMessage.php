@@ -16,11 +16,34 @@ class CampaignMessage extends Mailable
     public function __construct(
         public EmailCampaign $campaign,
         public string $contactName,
+        public string $contactLevel,
+        public string $contactCompany,
+        public string $contactEmail,
+        public string $contactPhone,
     ) {}
+
+    public function personalizedBody(): string
+    {
+        return $this->personalize($this->campaign->body);
+    }
+
+    public function personalizedSubject(): string
+    {
+        return $this->personalize($this->campaign->subject);
+    }
+
+    private function personalize(string $content): string
+    {
+        return str_replace(
+            ['{{ name }}', '{{ level }}', '{{ company }}', '{{ email }}', '{{ phone }}'],
+            [$this->contactName, $this->contactLevel, $this->contactCompany, $this->contactEmail, $this->contactPhone],
+            $content,
+        );
+    }
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: $this->campaign->subject);
+        return new Envelope(subject: $this->personalizedSubject());
     }
 
     public function content(): Content

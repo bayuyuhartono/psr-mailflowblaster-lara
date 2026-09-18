@@ -21,7 +21,10 @@ class SendCampaignEmail implements ShouldQueue
     public function __construct(
         public int $campaignId,
         public string $contactName,
+        public string $contactLevel,
+        public string $contactCompany,
         public string $contactEmail,
+        public string $contactPhone,
     ) {}
 
     public function handle(): void
@@ -42,7 +45,14 @@ class SendCampaignEmail implements ShouldQueue
         Mail::purge('smtp');
 
         $campaign->update(['status' => 'sending']);
-        Mail::to($this->contactEmail, $this->contactName)->send(new CampaignMessage($campaign, $this->contactName));
+        Mail::to($this->contactEmail, $this->contactName)->send(new CampaignMessage(
+            $campaign,
+            $this->contactName,
+            $this->contactLevel,
+            $this->contactCompany,
+            $this->contactEmail,
+            $this->contactPhone,
+        ));
         $campaign->increment('sent_count');
         $this->markCompleteWhenFinished($campaign);
     }

@@ -14,7 +14,7 @@ class ContactImportController extends Controller
     public function store(ImportContactsRequest $request): RedirectResponse
     {
         $handle = fopen($request->file('file')->getRealPath(), 'r');
-        $expectedHeaders = ['name', 'level', 'company', 'email', 'phone'];
+        $expectedHeaders = ['name', 'level', 'company', 'email', 'phone', 'on_hold'];
         $headers = $handle === false ? false : fgetcsv($handle);
 
         if ($handle === false || $headers !== $expectedHeaders) {
@@ -32,7 +32,7 @@ class ContactImportController extends Controller
             $line++;
             if (count($values) !== count($expectedHeaders)) {
                 fclose($handle);
-                throw ValidationException::withMessages(['file' => "Row {$line} must contain exactly five columns."]);
+                throw ValidationException::withMessages(['file' => "Row {$line} must contain exactly six columns."]);
             }
 
             $row = array_combine($expectedHeaders, $values);
@@ -42,7 +42,10 @@ class ContactImportController extends Controller
                 'company' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'email', 'max:255'],
                 'phone' => ['nullable', 'string', 'max:50'],
+                'on_hold' => ['required', 'in:yes,no'],
             ])->validate();
+            $row['is_on_hold'] = $row['on_hold'] === 'yes';
+            unset($row['on_hold']);
             $rows[] = $row;
         }
 

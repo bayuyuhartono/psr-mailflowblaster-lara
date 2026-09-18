@@ -10,8 +10,8 @@ class ContactTemplateController extends Controller
     {
         return response()->streamDownload(function (): void {
             $stream = fopen('php://output', 'w');
-            fputcsv($stream, ['name', 'level', 'company', 'email', 'phone']);
-            fputcsv($stream, ['Jane Doe', 'Gold', 'Acme Ltd', 'jane@example.com', '+62 812 3456 7890']);
+            fputcsv($stream, ['name', 'level', 'company', 'email', 'phone', 'on_hold']);
+            fputcsv($stream, ['Jane Doe', 'Gold', 'Acme Ltd', 'jane@example.com', '+62 812 3456 7890', 'no']);
             fclose($stream);
         }, 'contact-import-template.csv', ['Content-Type' => 'text/csv']);
     }

@@ -1,9 +1,14 @@
 <?php
 
 use App\Models\EmailSetting;
+use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 uses(LazilyRefreshDatabase::class);
+
+beforeEach(function (): void {
+    $this->actingAs(User::factory()->create());
+});
 
 it('stores smtp configuration and encrypts the password', function (): void {
     $this->put(route('email-settings.update'), [
