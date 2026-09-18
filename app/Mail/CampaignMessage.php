@@ -49,7 +49,7 @@ class CampaignMessage extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.campaign',
+            text: 'mail.campaign',
             with: ['personalizedBody' => $this->personalizedBody()],
         );
     }

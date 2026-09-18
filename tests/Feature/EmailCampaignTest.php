@@ -273,5 +273,7 @@ it('personalizes the email body with the contact name and company', function ():
     expect($message->personalizedSubject())->toBe('Welcome Jane Doe');
     expect($message->render())
         ->toContain('Jane Doe | Gold | Acme Ltd | jane@example.com | 12345')
+        ->not->toContain('<html')
+        ->not->toContain('Hello Jane Doe')
         ->not->toContain('{{ name }}');
 });

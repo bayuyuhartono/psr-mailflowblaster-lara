@@ -32,6 +32,18 @@ it('rejects a duplicate contact email', function (): void {
     expect(Contact::query()->count())->toBe(1);
 });
 
+it('shows active and held audience totals on the contact dashboard', function (): void {
+    Contact::factory()->count(2)->create(['is_on_hold' => false]);
+    Contact::factory()->create(['is_on_hold' => true]);
+
+    $this->get(route('contacts.index'))
+        ->assertOk()
+        ->assertViewHas('totalContactCount', 3)
+        ->assertViewHas('activeContactCount', 2)
+        ->assertViewHas('heldContactCount', 1)
+        ->assertSee('Contact directory');
+});
+
 it('updates and deletes a contact', function (): void {
     $contact = Contact::factory()->create();
 
@@ -45,4 +57,22 @@ it('updates and deletes a contact', function (): void {
 
     $this->delete(route('contacts.destroy', $contact))->assertRedirect(route('contacts.index'));
     $this->assertModelMissing($contact);
+});
+
+it('holds and releases a contact from the contact list', function (): void {
+    $contact = Contact::factory()->create(['name' => 'Jane Doe', 'is_on_hold' => false]);
+
+    $this->from(route('contacts.index'))->post(route('contact-holds.store', $contact))
+        ->assertRedirect(route('contacts.index'))
+        ->assertSessionHas('success');
+    expect($contact->refresh()->is_on_hold)->toBeTrue();
+
+    $this->get(route('contacts.index'))
+        ->assertSee('On hold')
+        ->assertSee('Release');
+
+    $this->from(route('contacts.index'))->delete(route('contact-holds.destroy', $contact))
+        ->assertRedirect(route('contacts.index'))
+        ->assertSessionHas('success');
+    expect($contact->refresh()->is_on_hold)->toBeFalse();
 });

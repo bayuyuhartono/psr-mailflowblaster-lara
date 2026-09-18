@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Mailflow' }}</title>
+    <title>{{ isset($title) ? $title.' - Mailflow' : 'Mailflow' }}</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/mailflow-envelope.svg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
 </head>
@@ -11,7 +12,7 @@
     <div class="min-h-screen lg:flex">
         <aside class="border-b border-slate-200 bg-slate-950 px-5 py-5 text-white lg:min-h-screen lg:w-64 lg:border-b-0">
             <a href="{{ route('campaigns.index') }}" class="flex items-center gap-3">
-                <span class="grid size-10 place-items-center rounded-xl bg-violet-500 text-lg font-bold">M</span>
+                <img src="{{ asset('images/mailflow-envelope.svg') }}" alt="" class="size-10">
                 <span><strong class="block text-lg">Mailflow</strong><small class="text-slate-400">Email blaster</small></span>
             </a>
             <nav class="mt-6 flex gap-2 overflow-x-auto lg:flex-col">

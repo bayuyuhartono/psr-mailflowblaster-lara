@@ -21,7 +21,12 @@ class ContactController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('contacts.index', compact('contacts'));
+        return view('contacts.index', [
+            'contacts' => $contacts,
+            'totalContactCount' => Contact::query()->count(),
+            'activeContactCount' => Contact::query()->where('is_on_hold', false)->count(),
+            'heldContactCount' => Contact::query()->where('is_on_hold', true)->count(),
+        ]);
     }
 
     public function create(): View

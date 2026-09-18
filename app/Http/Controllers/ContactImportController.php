@@ -8,9 +8,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class ContactImportController extends Controller
 {
+    public function create(): View
+    {
+        return view('contacts.import');
+    }
+
     public function store(ImportContactsRequest $request): RedirectResponse
     {
         $handle = fopen($request->file('file')->getRealPath(), 'r');

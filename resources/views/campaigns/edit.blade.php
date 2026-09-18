@@ -1,12 +1,13 @@
 <x-layouts.app title="Campaign Draft" heading="Campaign draft">
+    <div class="campaign-workspace">
     <div class="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div><div class="flex items-center gap-2"><span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800">Draft</span><span class="text-xs text-slate-400">Last saved {{ $campaign->updated_at->diffForHumans() }}</span></div><h2 class="mt-2 text-2xl font-bold">Review before you blast</h2><p class="mt-1 text-sm text-slate-500">Fine-tune your content, check the audience, then send when ready.</p></div>
         <a href="{{ route('campaigns.index') }}" class="rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">← All campaigns</a>
     </div>
 
-    <div class="grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
+    <div class="campaign-layout">
         <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div class="border-b border-slate-200 px-6 py-5"><p class="text-xs font-semibold uppercase tracking-widest text-violet-600">Email content</p><h3 class="mt-1 text-lg font-semibold">Subject and message</h3></div>
+            <div class="campaign-editor-heading"><span class="settings-step">02</span><div><p class="text-xs font-semibold uppercase tracking-widest text-violet-600">Review your draft</p><h3 class="mt-1 text-lg font-semibold">Subject and message</h3><p class="mt-1 text-sm text-slate-500">Save your changes before starting the blast.</p></div></div>
             <form method="POST" action="{{ route('campaigns.update', $campaign) }}" class="p-6">
                 @csrf @method('PUT')
                 <label class="grid gap-2"><span class="text-sm font-medium">Campaign name *</span><input name="name" required maxlength="255" value="{{ old('name', $campaign->name) }}" class="rounded-xl border border-slate-300 px-3.5 py-2.5 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100"><span class="text-xs text-slate-400">Internal only. Recipients will not see this name.</span></label>
@@ -24,15 +25,7 @@
 
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div class="flex items-start gap-3"><span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-violet-600 text-sm font-bold text-white">&#123;&#125;</span><div><h3 class="font-semibold">Personalization</h3><p class="mt-1 text-xs leading-5 text-slate-500">Copy these tokens into the subject or message.</p></div></div>
-                <div class="mt-4 grid gap-2">
-                    @verbatim
-                        <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-amber-50 px-3 py-2"><span class="text-xs text-slate-500">Contact name</span><code class="text-xs font-semibold text-violet-800">{{ name }}</code></div>
-                        <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-amber-50 px-3 py-2"><span class="text-xs text-slate-500">Customer level</span><code class="text-xs font-semibold text-violet-800">{{ level }}</code></div>
-                        <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-amber-50 px-3 py-2"><span class="text-xs text-slate-500">Company</span><code class="text-xs font-semibold text-violet-800">{{ company }}</code></div>
-                        <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-amber-50 px-3 py-2"><span class="text-xs text-slate-500">Email</span><code class="text-xs font-semibold text-violet-800">{{ email }}</code></div>
-                        <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-amber-50 px-3 py-2"><span class="text-xs text-slate-500">Phone</span><code class="text-xs font-semibold text-violet-800">{{ phone }}</code></div>
-                    @endverbatim
-                </div>
+                <x-personalization-list />
             </div>
 
             <div class="rounded-2xl border border-amber-200 bg-amber-50 p-5 shadow-sm">
@@ -46,5 +39,6 @@
                 <p class="mt-3 text-center text-xs text-slate-500">Sending permanently locks editing and deletion.</p>
             </div>
         </aside>
+    </div>
     </div>
 </x-layouts.app>
