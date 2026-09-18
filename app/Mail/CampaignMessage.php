@@ -48,7 +48,10 @@ class CampaignMessage extends Mailable
 
     public function content(): Content
     {
-        return new Content(markdown: 'mail.campaign');
+        return new Content(
+            markdown: 'mail.campaign',
+            with: ['personalizedBody' => $this->personalizedBody()],
+        );
     }
 
     public function attachments(): array

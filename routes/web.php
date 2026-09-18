@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\CampaignBlastController;
+use App\Http\Controllers\CampaignCopyController;
+use App\Http\Controllers\CampaignDeliveryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ContactImportController;
 use App\Http\Controllers\ContactTemplateController;
@@ -18,8 +21,10 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware('auth')->group(function (): void {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    Route::get('campaigns', [EmailCampaignController::class, 'index'])->name('campaigns.index');
-    Route::post('campaigns', [EmailCampaignController::class, 'store'])->middleware('throttle:10,1')->name('campaigns.store');
+    Route::resource('campaigns', EmailCampaignController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+    Route::post('campaigns/{campaign}/blast', [CampaignBlastController::class, 'store'])->middleware('throttle:10,1')->name('campaigns.blast');
+    Route::post('campaigns/{campaign}/send-next', [CampaignDeliveryController::class, 'store'])->name('campaigns.send-next');
+    Route::post('campaigns/{campaign}/copy', [CampaignCopyController::class, 'store'])->name('campaigns.copy');
     Route::get('email-settings', [EmailSettingController::class, 'edit'])->name('email-settings.edit');
     Route::put('email-settings', [EmailSettingController::class, 'update'])->name('email-settings.update');
     Route::post('contacts/import', [ContactImportController::class, 'store'])->name('contacts.import');

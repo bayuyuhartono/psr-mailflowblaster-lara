@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEmailCampaignRequest extends FormRequest
+class CopyEmailCampaignRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,6 @@ class StoreEmailCampaignRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255', 'unique:email_campaigns,name'],
-            'subject' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string', 'max:20000'],
-        ];
+        return ['name' => ['required', 'string', 'max:255', 'unique:email_campaigns,name']];
     }
 }
