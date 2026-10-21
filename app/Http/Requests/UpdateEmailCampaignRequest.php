@@ -27,6 +27,10 @@ class UpdateEmailCampaignRequest extends FormRequest
             'name' => ['required', 'string', 'max:255', Rule::unique('email_campaigns', 'name')->ignore($this->route('campaign'))],
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string', 'max:20000'],
+            'images' => ['sometimes', 'array', 'max:5'],
+            'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
+            'remove_images' => ['sometimes', 'array'],
+            'remove_images.*' => ['required', 'integer', 'min:0'],
         ];
     }
 }

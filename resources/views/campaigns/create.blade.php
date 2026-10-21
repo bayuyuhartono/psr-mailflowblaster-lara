@@ -8,11 +8,12 @@
     <div class="campaign-layout">
         <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="campaign-editor-heading"><span class="settings-step">01</span><div><p class="text-xs font-semibold uppercase tracking-widest text-violet-600">Compose</p><h3 class="mt-1 text-lg font-semibold">Start with your message</h3><p class="mt-1 text-sm text-slate-500">Your content stays editable until sending begins.</p></div></div>
-            <form method="POST" action="{{ route('campaigns.store') }}" class="p-6">
+            <form method="POST" action="{{ route('campaigns.store') }}" class="p-6" enctype="multipart/form-data">
                 @csrf
                 <label class="grid gap-2"><span class="text-sm font-medium">Campaign name *</span><input name="name" required maxlength="255" value="{{ old('name') }}" placeholder="September customer update" class="rounded-xl border border-slate-300 px-3.5 py-2.5 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100"><span class="text-xs text-slate-400">Internal only. Recipients will not see this name.</span></label>
                 <label class="mt-5 grid gap-2"><span class="text-sm font-medium">Email subject *</span><input name="subject" required maxlength="255" value="{{ old('subject') }}" placeholder="A special update for you" class="rounded-xl border border-slate-300 px-3.5 py-2.5 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100"></label>
                 <label class="mt-5 grid gap-2"><span class="text-sm font-medium">Message *</span><textarea name="body" required rows="15" maxlength="20000" placeholder="Hello @{{ name }},&#10;&#10;Write your message here…" class="resize-y rounded-xl border border-slate-300 px-3.5 py-3 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100">{{ old('body') }}</textarea></label>
+                <x-campaign-images />
                 <div class="mt-6 flex flex-wrap items-center gap-3"><button class="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-700">Create campaign draft</button><span class="text-xs text-slate-400">Nothing will be sent yet.</span></div>
             </form>
         </section>

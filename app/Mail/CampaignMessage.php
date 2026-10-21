@@ -49,6 +49,7 @@ class CampaignMessage extends Mailable
     public function content(): Content
     {
         return new Content(
+            view: $this->campaign->images ? 'mail.campaign-html' : null,
             text: 'mail.campaign',
             with: ['personalizedBody' => $this->personalizedBody()],
         );

@@ -8,6 +8,7 @@ use App\Models\CampaignDelivery;
 use App\Models\Contact;
 use App\Models\EmailCampaign;
 use App\Models\EmailSetting;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +34,7 @@ class EmailCampaignController extends Controller
     public function store(StoreEmailCampaignRequest $request): RedirectResponse
     {
         $campaign = EmailCampaign::create([
-            ...$request->validated(),
+            ...$this->campaignData($request),
             'status' => 'draft',
             'created_by' => $request->user()->id,
         ]);
@@ -75,7 +76,7 @@ class EmailCampaignController extends Controller
     {
         abort_unless($campaign->status === 'draft', Response::HTTP_CONFLICT, 'Sent campaigns cannot be edited.');
 
-        $campaign->update($request->validated());
+        $campaign->update($this->campaignData($request, $campaign));
 
         return redirect()->route('campaigns.edit', $campaign)->with('success', 'Campaign draft updated successfully.');
     }
@@ -87,5 +88,19 @@ class EmailCampaignController extends Controller
         $campaign->delete();
 
         return redirect()->route('campaigns.index')->with('success', 'Campaign draft deleted successfully.');
+    }
+
+    /** @return array{name: string, subject: string, body: string, images: list<string>} */
+    private function campaignData(FormRequest $request, ?EmailCampaign $campaign = null): array
+    {
+        $images = collect($campaign?->images ?? [])
+            ->except($request->validated('remove_images', []))
+            ->values()->all();
+
+        foreach ($request->file('images', []) as $image) {
+            $images[] = $image->store('campaign-images', ['disk' => 'local', 'throw' => true]);
+        }
+
+        return [...$request->safe()->only(['name', 'subject', 'body']), 'images' => $images];
     }
 }

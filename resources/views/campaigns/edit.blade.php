@@ -8,11 +8,12 @@
     <div class="campaign-layout">
         <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="campaign-editor-heading"><span class="settings-step">02</span><div><p class="text-xs font-semibold uppercase tracking-widest text-violet-600">Review your draft</p><h3 class="mt-1 text-lg font-semibold">Subject and message</h3><p class="mt-1 text-sm text-slate-500">Save your changes before starting the blast.</p></div></div>
-            <form method="POST" action="{{ route('campaigns.update', $campaign) }}" class="p-6">
+            <form method="POST" action="{{ route('campaigns.update', $campaign) }}" class="p-6" enctype="multipart/form-data">
                 @csrf @method('PUT')
                 <label class="grid gap-2"><span class="text-sm font-medium">Campaign name *</span><input name="name" required maxlength="255" value="{{ old('name', $campaign->name) }}" class="rounded-xl border border-slate-300 px-3.5 py-2.5 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100"><span class="text-xs text-slate-400">Internal only. Recipients will not see this name.</span></label>
                 <label class="mt-5 grid gap-2"><span class="text-sm font-medium">Email subject *</span><input name="subject" required maxlength="255" value="{{ old('subject', $campaign->subject) }}" class="rounded-xl border border-slate-300 px-3.5 py-2.5 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100"></label>
                 <label class="mt-5 grid gap-2"><span class="text-sm font-medium">Message *</span><textarea name="body" required rows="15" maxlength="20000" class="resize-y rounded-xl border border-slate-300 px-3.5 py-3 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100">{{ old('body', $campaign->body) }}</textarea></label>
+                <x-campaign-images :campaign="$campaign" />
                 <div class="mt-6 flex flex-wrap items-center gap-3"><button class="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-700">Save changes</button><span class="text-xs text-slate-400">Save before blasting to include your latest edits.</span></div>
             </form>
         </section>

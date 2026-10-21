@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\CampaignBlastController;
 use App\Http\Controllers\CampaignCopyController;
 use App\Http\Controllers\CampaignDeliveryController;
+use App\Http\Controllers\CampaignImageController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ContactHoldController;
 use App\Http\Controllers\ContactImportController;
@@ -26,6 +27,7 @@ Route::middleware('auth')->group(function (): void {
     Route::post('campaigns/{campaign}/blast', [CampaignBlastController::class, 'store'])->middleware('throttle:10,1')->name('campaigns.blast');
     Route::post('campaigns/{campaign}/send-next', [CampaignDeliveryController::class, 'store'])->name('campaigns.send-next');
     Route::post('campaigns/{campaign}/copy', [CampaignCopyController::class, 'store'])->name('campaigns.copy');
+    Route::get('campaigns/{campaign}/images/{image}', CampaignImageController::class)->whereNumber('image')->name('campaigns.images.show');
     Route::get('email-settings', [EmailSettingController::class, 'edit'])->name('email-settings.edit');
     Route::put('email-settings', [EmailSettingController::class, 'update'])->name('email-settings.update');
     Route::get('contacts/import', [ContactImportController::class, 'create'])->name('contacts.import.create');

@@ -10,7 +10,12 @@ class EmailCampaign extends Model
 {
     protected $attributes = ['status' => 'draft'];
 
-    protected $fillable = ['name', 'subject', 'body', 'status', 'recipient_count', 'sent_count', 'failed_count', 'created_by'];
+    protected $fillable = ['name', 'subject', 'body', 'images', 'status', 'recipient_count', 'sent_count', 'failed_count', 'created_by'];
+
+    protected function casts(): array
+    {
+        return ['images' => 'array'];
+    }
 
     public function creator(): BelongsTo
     {

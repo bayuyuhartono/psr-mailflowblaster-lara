@@ -40,7 +40,7 @@
 
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><h3 class="font-semibold">Copy campaign</h3><p class="mt-2 text-sm text-slate-500">Reuse the subject and message in a new editable draft.</p><form method="POST" action="{{ route('campaigns.copy', $campaign) }}" class="mt-4 grid gap-3">@csrf<label class="grid gap-2"><span class="text-xs font-medium">New campaign name</span><input name="name" required maxlength="255" placeholder="New internal name" class="rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100"></label><button class="rounded-xl border border-slate-300 bg-violet-50 px-4 py-2.5 text-sm font-semibold text-violet-800 hover:bg-slate-100">Create copy</button></form></div>
 
-            <details class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><summary class="font-semibold">View original message</summary><p class="mt-3 text-sm font-semibold">{{ $campaign->subject }}</p><p class="campaign-message mt-2 text-sm text-slate-600">{{ $campaign->body }}</p></details>
+            <details class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><summary class="font-semibold">View original message</summary><p class="mt-3 text-sm font-semibold">{{ $campaign->subject }}</p><p class="campaign-message mt-2 text-sm text-slate-600">{{ $campaign->body }}</p>@foreach ($campaign->images ?? [] as $index => $image)<img src="{{ route('campaigns.images.show', [$campaign, $index]) }}" alt="Campaign image {{ $loop->iteration }}" class="mt-3 max-w-full rounded-lg">@endforeach</details>
         </aside>
     </div>
     </div>

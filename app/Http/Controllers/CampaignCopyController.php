@@ -14,6 +14,7 @@ class CampaignCopyController extends Controller
             'name' => $request->validated('name'),
             'subject' => $campaign->subject,
             'body' => $campaign->body,
+            'images' => $campaign->images,
             'status' => 'draft',
             'created_by' => $request->user()->id,
         ]);

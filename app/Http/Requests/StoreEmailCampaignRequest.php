@@ -26,6 +26,8 @@ class StoreEmailCampaignRequest extends FormRequest
             'name' => ['required', 'string', 'max:255', 'unique:email_campaigns,name'],
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string', 'max:20000'],
+            'images' => ['sometimes', 'array', 'max:5'],
+            'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
         ];
     }
 }
